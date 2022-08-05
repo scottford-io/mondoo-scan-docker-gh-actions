@@ -1,6 +1,6 @@
-![gh-actions badge](https://github.com/scottford-io/gh-actions-docker-ghcr/actions/workflows/build-push.yml/badge.svg)
+![gh-actions badge](https://github.com/scottford-io/mondoo-scan-docker-gh-actions/actions/workflows/build-push.yml/badge.svg)
 
-# Python Flask App Demo
+# Scan Docker builds with Mondoo
 
 This repository contains a `Dockerfile` which builds a simple Python Flask app. The application is borrowed from the [Get Started with Docker Compose](https://docs.docker.com/compose/gettingstarted/) tutorial from Docker. Additionally, the repository contains a `docker-compose.yml`, and a `Jenkinsfile`for demonstration purposes.
 

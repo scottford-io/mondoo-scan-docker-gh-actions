@@ -1,4 +1,4 @@
-name: docker-build-push
+name: docker-build-push-scan
 
 on:
   push:
@@ -25,6 +25,19 @@ jobs:
           registry: ghcr.io
           username: ${{ github.repository_owner }}
           password: ${{ secrets.GHCR_TOKEN }}
+      - 
+        name: Install Mondoo Client
+        run: |
+          curl -sSL https://mondoo.com/download.sh | bash
+          mondoo version
+      
+      -
+        name: Configure Mondoo
+        run: |
+          echo ${{ secrets.MONDOO_SERVICE_ACCOUNT }} | base64 -d > mondoo.json
+          cat mondoo.json
+          mondoo status --config mondoo.json
+
       -
         name: Build and push
         uses: docker/build-push-action@v3
