@@ -18,6 +18,23 @@ jobs:
       -
         name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
+        id: buildx
+        with:
+          install: true
+
+      - 
+        name: Setup Mondoo Client
+        run: |
+          curl -sSL https://mondoo.com/download.sh | bash
+          ./mondoo version
+          echo ${{ secrets.MONDOO_SERVICE_ACCOUNT }} | base64 -d > mondoo.json
+          cat mondoo.json
+          ./mondoo status --config mondoo.json
+
+      - 
+        name: Docker Build
+        run: docker build .
+
       -
         name: Login to GitHub Container Registry
         uses: docker/login-action@v2
@@ -25,26 +42,3 @@ jobs:
           registry: ghcr.io
           username: ${{ github.repository_owner }}
           password: ${{ secrets.GHCR_TOKEN }}
-      - 
-        name: Install Mondoo Client
-        run: |
-          curl -sSL https://mondoo.com/download.sh | bash
-          ./mondoo version
-      
-      -
-        name: Configure Mondoo
-        run: |
-          echo ${{ secrets.MONDOO_SERVICE_ACCOUNT }} | base64 -d > mondoo.json
-          cat mondoo.json
-          ./mondoo status --config mondoo.json
-
-      -
-        name: Build and push
-        uses: docker/build-push-action@v3
-        with:
-          context: .
-          platforms: linux/amd64,linux/arm64
-          push: true
-          tags: |
-            ghcr.io/scottford-io/python-flask-app:latest
-            ghcr.io/scottford-io/python-flask-app:1.0.0
