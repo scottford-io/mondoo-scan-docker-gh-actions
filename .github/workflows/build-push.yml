@@ -31,26 +31,23 @@ jobs:
           cat mondoo.json
           ./mondoo status --config mondoo.json
 
-      - name: Build and push Docker images
-        id: docker_build
-        uses: docker/build-push-action@v2
-        with:
-          context: .
-          push: false
-          tags: ${{ steps.meta.outputs.tags }}
-          labels: ${{ steps.meta.outputs.labels }}
-
-      - name: Print my docker imageid in a separate step
-        run: echo "imageid ${{ steps.docker_build.outputs.imageid }}"
+      - 
+        name: Docker Build
+        run: |
+          docker build . -t ghcr.io/${{ github.repository_owner }}/secure-python-app
+      
+      -
+        name: Run Docker images
+          docker images
 
       # - name: Mondoo scan 
-      #   run: ./mondoo scan docker docker://ghcr.io/${{ github.repository_owner }}/secure-python-app --config mondoo.json
+      #   run: ./mondoo scan docker ghcr.io/${{ github.repository_owner }}/secure-python-app --config mondoo.json
 
 
-      # -
-      #   name: Login to GitHub Container Registry
-      #   run: echo $GHCR_TOKEN | docker login ghcr.io -u ${{ github.repository_owner }} --password-stdin
+      -
+        name: Login to GitHub Container Registry
+        run: echo $GHCR_TOKEN | docker login ghcr.io -u ${{ github.repository_owner }} --password-stdin
 
-      # - 
-      #   name: Push image
-      #   run: docker push ghcr.io/${{ github.repository_owner }}/secure-python-app
+      - 
+        name: Push image
+        run: docker push ghcr.io/${{ github.repository_owner }}/secure-python-app
