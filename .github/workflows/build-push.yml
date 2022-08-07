@@ -33,12 +33,11 @@ jobs:
 
       - 
         name: Docker Build
-        run: |
-          docker build . -t ghcr.io/${{ github.repository_owner }}/secure-python-app
+        run: docker build . -t ghcr.io/${{ github.repository_owner }}/secure-python-app
       
       -
         name: Run Docker images
-          docker images
+        run: docker images
 
       # - name: Mondoo scan 
       #   run: ./mondoo scan docker ghcr.io/${{ github.repository_owner }}/secure-python-app --config mondoo.json
